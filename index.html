@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<!-- زمانی سەرەکی: کوردی سۆرانی، ئاراستە: ڕاست بۆ چەپ -->
+<html lang="ckb" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ناونیشان بە JavaScript دادەنرێت -->
+    <title>گۆڕینی ژمارە بۆ نووسین</title>
+    <style>
+        :root {
+            --primary-color: #5e35b1; /* ڕەنگی سەرەکی */
+            --primary-light: #9162e4; /* ڕەنگی سەرەکی ڕووناکتر */
+            --primary-dark: #280680; /* ڕەنگی سەرەکی تاریکتر */
+            --secondary-color: #00897b; /* ڕەنگی دووەمی */
+            --secondary-light: #4ebaaa;
+            --secondary-dark: #005b4f;
+            --accent-color: #ff6d00; /* ڕەنگی جیاکەرەوە */
+            --bg-color: #f8f9fa; /* ڕەنگی پاشبنەمای لاپەڕە (ڕووناک) */
+            --card-color: #ffffff; /* ڕەنگی کارد (ڕووناک) */
+            --text-color: #212121; /* ڕەنگی نووسین (ڕووناک) */
+            --text-secondary: #757575; /* ڕەنگی نووسینی دووەمی */
+            --border-radius: 12px; /* چەماوەیی گۆشەکان */
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* سێبەر */
+            --transition: all 0.3s ease; /* ترانزیشن */
+            --footer-text-color: #555; /* ڕەنگی نووسینی فووتەر (ڕووناک) */
+            --footer-link-color: var(--primary-color); /* ڕەنگی لینکی فووتەر (ڕووناک) */
+            --border-color-light: #e0e0e0; /* ڕەنگی بۆردەر (ڕووناک) */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* زیادکردنی فۆنتی Noto Sans Arabic بۆ پشتگیری باشتر */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap');
+        /* زیادکردنی فۆنتی ئینگلیزی */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+        html {
+            height: 100%; /* بۆ دڵنیابوون لە بەرزی */
+        }
+
+        body {
+            font-family: 'Noto Sans Arabic', 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* دانانی فۆنت */
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%); /* پاشبنەمای گرادیانت */
+            min-height: 100%; /* گرتنی بەرزی تەواو */
+            height: 100%; /* لەسەر مۆبایل پێویستە */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px; /* بۆشایی دەوری لاپەڕە (لەسەر دیسکتۆپ) */
+            color: var(--text-color);
+            /* direction: rtl; - This is now set dynamically via JS */
+            overflow-x: hidden; /* ڕێگری لە سکڕۆڵی ئاسۆیی */
+        }
+
+        /* --- ستایلە بنەڕەتییەکان --- */
+        .container {
+            width: 100%;
+            max-width: 650px;
+            height: auto;
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s forwards;
+            padding-bottom: 70px; /* بۆشایی بۆ فووتەر */
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 40px); /* ڕێگری لە دەرچوون لە شاشە */
+        }
+
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 25px 30px;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0; /* ڕێگری لە بچووکبوونەوەی هێدەر */
+        }
+        .header h1 { margin: 0; font-size: 24px; font-weight: 600; }
+        .header p { margin-top: 8px; opacity: 0.9; font-size: 15px; }
+
+        .content {
+            padding: 30px;
+            flex-grow: 1; /* گەشەکردن بۆ پڕکردنەوەی بۆشایی */
+            overflow-y: auto; /* سکڕۆڵ ئەگەر پێویست بوو */
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-light) transparent;
+        }
+        .content::-webkit-scrollbar { width: 6px; }
+        .content::-webkit-scrollbar-track { background: transparent; }
+        .content::-webkit-scrollbar-thumb { background-color: var(--primary-light); border-radius: 10px; }
+
+        .input-group { position: relative; margin-bottom: 25px; }
+        .input-label {
+            position: absolute;
+            top: -10px;
+            /* Default RTL */
+            right: 15px;
+            left: auto;
+            background-color: var(--card-color);
+            padding: 0 5px;
+            color: var(--primary-color);
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1;
+            transition: background-color 0.3s ease, color 0.3s ease, left 0s, right 0s; /* Add left/right */
+        }
+        .input-field {
+            width: 100%;
+            padding: 18px 20px;
+            border: 2px solid var(--border-color-light);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+            color: var(--text-color);
+            background-color: var(--card-color);
+            /* Default RTL */
+            text-align: right;
+            direction: ltr; /* Always LTR for number input itself */
+            font-family: monospace, 'Noto Sans Arabic', 'Poppins'; /* Add Poppins */
+        }
+        .input-field:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(94, 53, 177, 0.2); }
+
+        /* --- ئایکۆنەکانی سەرەوە --- */
+        .header-controls {
+            position: absolute;
+            top: 15px; /* Adjust as needed */
+            /* Default RTL */
+            left: 15px;
+            right: auto;
+            display: flex;
+            gap: 10px; /* Space between icons */
+            align-items: center;
+            z-index: 11; /* Ensure it's above header gradient */
+        }
+        .theme-toggle, .language-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            position: relative; /* For ripple */
+            overflow: hidden; /* For ripple */
+        }
+        .theme-toggle svg { stroke: white; transition: transform 0.3s ease; }
+        .language-toggle {
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            font-family: sans-serif;
+        }
+        .theme-toggle:hover, .language-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05); /* Slight scale on hover */
+        }
+        .theme-toggle:hover svg { transform: scale(1.1); }
+
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            animation: ripple-anim 0.6s linear;
+            pointer-events: none;
+        }
+        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+
+        /* --- ناوچەی ئەنجام --- */
+        .result-container {
+            background-color: var(--bg-color);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            /* Default RTL */
+            border-right: 4px solid var(--secondary-color);
+            border-left: none;
+            min-height: 150px; /* Minimum height */
+            transition: opacity 0.5s ease, transform 0.5s ease, border-color 0.3s ease, background-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+            display: flex; /* Enable flex for content alignment */
+            flex-direction: column; /* Stack label and content */
+            opacity: 0; /* Initially hidden */
+            transform: translateY(10px); /* Initial offset for animation */
+        }
+        .result-container.show { opacity: 1; transform: translateY(0); }
+        .result-label {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 12px;
+            font-size: 16px;
+            flex-shrink: 0; /* Prevent label from shrinking */
+            transition: color 0.3s ease;
+        }
+        .result-content {
+            color: var(--text-color);
+            font-size: 18px;
+            line-height: 1.7;
+            word-wrap: break-word;
+            /* Default RTL */
+            text-align: right;
+            padding-left: 55px; /* Space for copy btn */
+            padding-right: 0;
+            flex-grow: 1; /* Allow content to grow */
+            min-height: 50px; /* Ensure some space even if empty initially */
+            max-height: 300px; /* Limit max height before scrolling */
+            overflow-y: auto; /* Add scroll if content exceeds max height */
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary-light) transparent;
+            transition: color 0.3s ease, padding 0s; /* Add padding transition */
+        }
+        .result-content::-webkit-scrollbar { width: 6px; }
+        .result-content::-webkit-scrollbar-track { background: transparent; margin: 2px; }
+        .result-content::-webkit-scrollbar-thumb { background-color: var(--secondary-light); border-radius: 10px; }
+        /* Animation for revealing text words */
+        .result-content span { display: inline-block; opacity: 0; transform: translateY(10px); margin: 0 2px; animation: revealText 0.4s forwards ease-out; }
+        @keyframes revealText { to { opacity: 1; transform: translateY(0); } }
+        /* Highlight specific words */
+        .highlight-word { display: inline-block; border-radius: 4px; padding: 0 3px; animation: highlightNumber 1.5s ease-in-out; background-color: rgba(0, 137, 123, 0.05); margin: 0 1px; }
+        @keyframes highlightNumber { 0% { background-color: rgba(0, 137, 123, 0); } 50% { background-color: rgba(0, 137, 123, 0.15); } 100% { background-color: rgba(0, 137, 123, 0); } }
+
+        /* --- دوگمەی کۆپی --- */
+        .copy-btn {
+            position: absolute;
+            bottom: 15px;
+            /* Default RTL */
+            left: 15px;
+            right: auto;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease, left 0s, right 0s; /* Add left/right */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            transform: scale(0); /* Initially hidden */
+            opacity: 0; /* Initially hidden */
+            outline: none;
+            overflow: hidden; /* For ripple */
+        }
+        .copy-btn.show { transform: scale(1); opacity: 1; animation: scaleIn 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes scaleIn { from { transform: scale(0.5); opacity: 0;} to { transform: scale(1); opacity: 1; } }
+        .copy-btn.show:hover { background-color: var(--secondary-dark); transform: scale(1.08); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
+
+
+        /* --- ئاگادارکەرەوە (Alert) --- */
+        .alert {
+            position: fixed;
+            top: -100px; /* Start off-screen */
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: top 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s ease;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            min-width: 300px;
+            /* Default RTL */
+            text-align: right;
+        }
+        .alert-icon {
+            /* Default RTL */
+            margin-left: 10px;
+            margin-right: 0;
+            transition: margin 0s; /* Prevent transition */
+        }
+        .alert-icon svg { stroke: white; }
+
+
+        /* --- سپینەری Loading --- */
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            display: none; /* Initially hidden */
+            z-index: 5;
+        }
+        .loading-spinner:after {
+            content: " "; display: block; width: 32px; height: 32px; margin: 4px; border-radius: 50%;
+            border: 3px solid var(--secondary-color); border-color: var(--secondary-color) transparent var(--secondary-color) transparent;
+            animation: spinner 1.2s linear infinite;
+            transition: border-color 0.3s ease;
+        }
+        @keyframes spinner { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- ژمێرەری نووسەکان --- */
+        .char-counter {
+            position: absolute;
+            bottom: -22px;
+            /* Default RTL */
+            left: 10px;
+            right: auto;
+            font-size: 12px;
+            color: var(--text-secondary);
+            opacity: 0.8;
+            direction: ltr; /* Keep LTR for counter */
+            width: auto; /* Adjust width based on content */
+            text-align: left; /* Keep LTR */
+            background: var(--card-color); /* Background to overlay border */
+            padding: 0 5px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease, left 0s, right 0s; /* Add left/right */
+        }
+
+
+        /* --- دیکۆرەیشنەکان --- */
+        .decoration { position: fixed; width: 200px; height: 200px; border-radius: 50%; background: linear-gradient(135deg, rgba(94, 53, 177, 0.1) 0%, rgba(94, 53, 177, 0.05) 100%); z-index: -1; pointer-events: none; animation: float 6s ease-in-out infinite; }
+        .decoration-1 { bottom: -100px; right: -100px; }
+        .decoration-2 { top: -100px; left: -100px; animation-duration: 8s; animation-direction: reverse; }
+        .decoration-3 { bottom: 50%; left: -150px; width: 300px; height: 300px; background: linear-gradient(135deg, rgba(0, 137, 123, 0.08) 0%, rgba(0, 137, 123, 0.03) 100%); animation-duration: 10s; animation-delay: 2s; }
+        .decoration-4 { top: 30%; right: -120px; width: 250px; height: 250px; background: linear-gradient(135deg, rgba(255, 109, 0, 0.08) 0%, rgba(255, 109, 0, 0.03) 100%); animation-duration: 9s; animation-delay: 1s; }
+        @keyframes float { 0% { transform: translateY(0px) translateX(0px) rotate(0deg); } 50% { transform: translateY(-15px) translateX(5px) rotate(5deg); } 100% { transform: translateY(0px) translateX(0px) rotate(0deg); } }
+
+        /* --- فووتەر --- */
+        #page-footer { position: absolute; bottom: 15px; left: 0; right: 0; text-align: center; font-size: 14px; color: var(--footer-text-color); z-index: 1; transition: color 0.3s ease; }
+        #page-footer a { color: var(--footer-link-color); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        #page-footer a:hover { color: var(--primary-dark); text-decoration: underline; }
+
+        /* ==================== LTR Styles ==================== */
+        html[dir="ltr"] body { direction: ltr; }
+        html[dir="ltr"] .header-controls { left: auto; right: 15px; }
+        html[dir="ltr"] .input-label { right: auto; left: 15px; }
+        html[dir="ltr"] .input-field { text-align: left; }
+        html[dir="ltr"] .char-counter { left: auto; right: 10px; text-align: right; }
+        html[dir="ltr"] .result-container { border-right: none; border-left: 4px solid var(--secondary-color); }
+        html[dir="ltr"] .result-content { text-align: left; padding-left: 0; padding-right: 55px; }
+        html[dir="ltr"] .copy-btn { left: auto; right: 15px; }
+        html[dir="ltr"] .alert { text-align: left; }
+        html[dir="ltr"] .alert-icon { margin-left: 0; margin-right: 10px; }
+        /* LTR Dark mode border fix */
+        html[dir="ltr"].dark-mode .result-container { border-right-color: transparent; border-left-color: var(--secondary-color); }
+
+        /* ==================== شاشەی بچووک (مۆبایل) ==================== */
+        @media (max-width: 600px) {
+            body { padding: 0; align-items: flex-start; /* Align container to top */ height: 100%; overflow-y: hidden; /* Prevent body scroll */ }
+            .container {
+                 max-width: none; width: 100%; height: 100%; min-height: 100%; /* Full height */
+                 margin: 0; border-radius: 0; box-shadow: none;
+                 padding-bottom: 65px; /* Adjust footer space */
+                 transform: none; opacity: 1; animation: none; /* Remove entry animation */
+                 max-height: none; /* Allow full height */
+                 overflow: hidden; /* Prevent container internal overflow issues */
+            }
+            .header { padding: 20px 20px 15px 20px; }
+            .header h1 { font-size: 20px; }
+            .header p { font-size: 13px; margin-top: 5px; }
+            .header-controls { top: 12px; /* Adjust position */ left: 12px; gap: 8px; }
+            .theme-toggle, .language-toggle { width: 36px; height: 36px; }
+            .language-toggle { font-size: 13px; }
+            .content { padding: 20px; overflow-y: auto; flex-grow: 1; /* Ensure content scrolls, not body */ }
+            .input-field { padding: 15px; font-size: 15px; }
+            .input-label { font-size: 13px; top: -9px; }
+            .char-counter { bottom: -20px; font-size: 11px; }
+            .result-container { padding: 15px; min-height: 120px; margin-top: 15px; }
+            .result-content { font-size: 16px; min-height: 40px; max-height: 250px; padding-left: 50px; /* Adjust copy button space */ }
+            .copy-btn { bottom: 12px; left: 12px; width: 40px; height: 40px; }
+            .alert {
+                 width: calc(100% - 30px); min-width: auto; left: 15px; transform: translateX(0);
+                 bottom: -100px; top: auto !important; /* Force bottom positioning */ font-size: 14px; padding: 12px 20px;
+            }
+            /* Specific class to trigger mobile alert animation */
+            .alert.show-mobile { bottom: 15px; }
+            .decoration { display: none; } /* Hide decorations on mobile */
+            #page-footer { font-size: 12px; bottom: 15px; }
+
+            /* LTR Mobile adjustments */
+            html[dir="ltr"] .header-controls { left: auto; right: 12px; }
+            html[dir="ltr"] .result-content { padding-left: 0; padding-right: 50px; }
+            html[dir="ltr"] .copy-btn { left: auto; right: 12px; }
+            html[dir="ltr"] .char-counter { left: auto; right: 10px; }
+        }
+
+        /* ==================== دۆخی تاریک ==================== */
+        html.dark-mode {
+            --bg-color: #121212; --card-color: #1e1e1e; --text-color: #e0e0e0; --text-secondary: #aaaaaa;
+            --primary-color: #7e57c2; --primary-light: #b085f5; --primary-dark: #4d2c91;
+            --secondary-color: #26a69a; --secondary-light: #64d8cb; --secondary-dark: #00766c;
+            --border-color-light: #3d3d3d; --footer-text-color: #aaa; --footer-link-color: var(--primary-light);
+        }
+        html.dark-mode body { background: linear-gradient(135deg, #1a1a2e 0%, #121212 100%); color: var(--text-color); }
+        html.dark-mode .container { background-color: var(--card-color); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); }
+        @media (max-width: 600px) { html.dark-mode .container { box-shadow: none; } } /* Remove shadow on mobile dark */
+        html.dark-mode .header { background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%); }
+        html.dark-mode .input-label { background-color: var(--card-color); color: var(--primary-light); }
+        html.dark-mode .input-field { background-color: #2d2d2d; border-color: var(--border-color-light); color: var(--text-color); }
+        html.dark-mode .input-field:focus { border-color: var(--primary-light); box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.3); }
+        html.dark-mode .char-counter { background: var(--card-color); color: var(--text-secondary); }
+        html.dark-mode .content { scrollbar-color: var(--primary-dark) transparent; }
+        html.dark-mode .content::-webkit-scrollbar-thumb { background-color: var(--primary-dark); }
+        html.dark-mode .result-container { background-color: #2d2d2d; border-right-color: var(--secondary-color); /* Reset LTR border */ border-left-color: transparent; }
+        html.dark-mode .result-label { color: var(--secondary-light); }
+        html.dark-mode .result-content { color: var(--text-color); scrollbar-color: var(--secondary-dark) transparent; }
+        html.dark-mode .result-content::-webkit-scrollbar-thumb { background-color: var(--secondary-dark); }
+        html.dark-mode .highlight-word { background-color: rgba(38, 166, 154, 0.15); }
+        html.dark-mode .copy-btn { background-color: var(--secondary-color); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4); }
+        html.dark-mode .copy-btn.show:hover { background-color: var(--secondary-dark); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); }
+        html.dark-mode .alert { background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 100%); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); }
+        html.dark-mode .theme-toggle, html.dark-mode .language-toggle { background-color: rgba(255, 255, 255, 0.1); color: #e0e0e0; }
+        html.dark-mode .theme-toggle:hover, html.dark-mode .language-toggle:hover { background-color: rgba(255, 255, 255, 0.15); }
+        html.dark-mode .theme-toggle svg { stroke: #e0e0e0; }
+        html.dark-mode .loading-spinner:after { border-color: var(--secondary-light) transparent var(--secondary-light) transparent; }
+        html.dark-mode .decoration { opacity: 0.5; background: linear-gradient(135deg, rgba(126, 87, 194, 0.05) 0%, rgba(126, 87, 194, 0.02) 100%); z-index: -1; }
+        html.dark-mode .decoration-3 { background: linear-gradient(135deg, rgba(38, 166, 154, 0.04) 0%, rgba(38, 166, 154, 0.01) 100%); }
+        html.dark-mode .decoration-4 { background: linear-gradient(135deg, rgba(255, 109, 0, 0.04) 0%, rgba(255, 109, 0, 0.01) 100%); }
+        html.dark-mode #page-footer a { color: var(--footer-link-color); }
+        html.dark-mode #page-footer a:hover { color: var(--primary-light); }
+
+        /* Fix potential LTR border issue in dark mode */
+        html[dir="ltr"].dark-mode .result-container {
+            border-left-color: var(--secondary-color);
+            border-right-color: transparent; /* Ensure right border is off in LTR dark mode */
+        }
+
+    </style>
+</head>
+<body>
+    <!-- دیکۆرەیشنەکان -->
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+    <div class="decoration decoration-3"></div>
+    <div class="decoration decoration-4"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1 id="mainTitle">گۆڕینی ژمارە بۆ نووسین</h1>
+            <p id="subtitle">ژمارەکە بنووسە، ڕاستەوخۆ دەگۆڕدرێت</p>
+
+            <!-- کۆنتڕۆڵەکانی سەرەوە: زمان و تێم -->
+            <div class="header-controls">
+                 <button class="language-toggle" id="languageToggle" title="گۆڕینی زمان">KU</button>
+                 <button class="theme-toggle" id="themeToggle" title="گۆڕینی ڕووناکی/تاریکی">
+                     <!-- ئایکۆنی خۆر (سەرەتا) -->
+                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <circle cx="12" cy="12" r="5"></circle> <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line> <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line> <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line> <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line> </svg>
+                 </button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="input-group">
+                <span class="input-label" id="inputLabel">ژمارە بنووسە</span>
+                <!-- inputmode="decimal" for better mobile keyboard, pattern for basic validation -->
+                <input type="text" id="numberInput" class="input-field" placeholder="لێرە ژمارە بنووسە..." inputmode="decimal" pattern="[0-9٠-٩,]*">
+                <div class="char-counter" id="charCounter">0 / 120</div>
+            </div>
+
+            <div id="resultContainer" class="result-container">
+                 <div class="result-label" id="resultLabel">ئەنجام:</div>
+                 <div class="loading-spinner" id="loadingSpinner"></div>
+                 <div id="resultText" class="result-content"></div>
+                 <button id="copyBtn" class="copy-btn" title="کۆپی کردنی ئەنجام">
+                    <!-- Copy Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                 </button>
+            </div>
+
+        </div> <!-- کۆتایی .content -->
+
+        <!-- فووتەر -->
+        <footer id="page-footer">
+             <!-- Footer content will be set by JS -->
+        </footer>
+
+    </div> <!-- کۆتایی .container -->
+
+    <!-- ناوچەی پەیامی ئاگادارکردنەوە (Alert) -->
+    <div id="alert" class="alert" role="alert">
+        <span class="alert-icon">
+            <!-- Checkmark Icon (for success) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </span>
+        <span id="alertText">پەیامێک</span>
+    </div>
+
+    <!-- ==================== JAVASCRIPT ==================== -->
+    <script>
+        // گرتنی ئێلێمێنتەکان
+        const htmlElement = document.documentElement;
+        const numberInput = document.getElementById('numberInput');
+        const resultContainer = document.getElementById('resultContainer');
+        const resultText = document.getElementById('resultText');
+        const copyBtn = document.getElementById('copyBtn');
+        const alertDiv = document.getElementById('alert');
+        const alertTextElement = document.getElementById('alertText');
+        const charCounter = document.getElementById('charCounter');
+        const themeToggle = document.getElementById('themeToggle');
+        const languageToggle = document.getElementById('languageToggle');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+
+        // گرتنی ئێلێمێنتەکانی ناوەڕۆک کە دەبێ بگۆڕدرێن
+        const pageTitle = document.querySelector('title');
+        const mainTitle = document.getElementById('mainTitle');
+        const subtitle = document.getElementById('subtitle');
+        const inputLabel = document.getElementById('inputLabel');
+        const resultLabel = document.getElementById('resultLabel');
+        const pageFooter = document.getElementById('page-footer');
+
+
+        const MAX_LENGTH = 120; // Max input length (digits)
+        let currentLang = localStorage.getItem('language') || 'ckb'; // Default to Kurdish
+
+        // دەقەکان بۆ زمانە جیاوازەکان
+        const languages = {
+            ckb: {
+                pageTitle: "گۆڕینی ژمارە بۆ نووسین",
+                mainTitle: "گۆڕینی ژمارە بۆ نووسین",
+                subtitle: "ژمارەکە بنووسە، ڕاستەوخۆ دەگۆڕدرێت",
+                inputLabel: "ژمارە بنووسە",
+                inputPlaceholder: "...لێرە ژمارەکە بنووسە",
+                resultLabel: "ئەنجام:",
+                copyBtnTitle: "کۆپی کردنی ئەنجام",
+                themeToggleTitle: "گۆڕینی ڕووناکی/تاریکی",
+                languageToggleTitle: "گۆڕینی زمان بۆ ئینگلیزی",
+                alertCopied: "ئەنجامەکە کۆپی کرا!",
+                alertCopyFailed: "کۆپیکردن سەرکەوتوو نەبوو",
+                alertNoResult: "هیچ ئەنجامێک نییە بۆ کۆپیکردن!",
+                alertLongInput: `تەنها دەتوانیت هەتا ${MAX_LENGTH} ژمارە (digit) بنووسیت.`,
+                alertConversionError: "هەڵەیەک ڕوویدا لە کاتی گۆڕینی ژمارەکە.",
+                alertNumberTooLarge: "ژمارەکە زۆر گەورەیە و ناتوانرێت بە تەواوی بگۆڕدرێت.",
+                footerText: `<a href="https://t.me/AW_Graphic_IT" target="_blank" rel="noopener noreferrer">ALAND</a>`,
+                langCode: 'ckb',
+                langDir: 'rtl',
+                langToggleText: 'EN',
+                 //وشە گرنگەکان بۆ هایلایت کردن
+                 highlightWords: ['هەزار', 'ملیۆن', 'ملیار', 'تریلیۆن', 'کوادریلیۆن', 'کوینتیلیۆن', 'سێکستیلیۆن', 'سێپتیلیۆن', 'ئۆکتیلیۆن', 'نۆنیلیۆن', 'دێسیلیۆن', 'ئەندێسیلیۆن', 'دۆدێسیلیۆن', 'ترێدێسیلیۆن', 'کواتوردێسیلیۆن', 'کویندێسیلیۆن', 'سێکسدێسیلیۆن', 'سێپتەندێسیلیۆن', 'ئۆکتۆدێسیلیۆن', 'نۆڤێمدێسیلیۆن', 'ڤیجینتیلیۆن', 'ئونڤیجینتیلیۆن', 'دۆڤیجینتیلیۆن', 'ترێڤیجینتیلیۆن', 'کواتورڤیجینتیلیۆن', 'کوینڤیجینتیلیۆن', 'سێکسڤیجینتیلیۆن', 'سێپتەمڤیجینتیلیۆن', 'ئۆکتۆڤیجینتیلیۆن', 'نۆڤێمڤیجینتیلیۆن', 'تریجینتیلیۆن', 'ئونتریجینتیلیۆن', 'دۆتریجینتیلیۆن', 'ترێتریجینتیلیۆن', 'کواتورتریجینتیلیۆن', 'کوینتریجینتیلیۆن', 'سێکستریجینتیلیۆن', 'سێپتەنتریجینتیلیۆن', 'ئۆکتۆتریجینتیلیۆن', 'نۆڤێمتریجینتیلیۆن'],
+            },
+            en: {
+                pageTitle: "Number to Text Converter",
+                mainTitle: "Number to Text Converter",
+                subtitle: "Enter the number, it converts instantly",
+                inputLabel: "Enter Number",
+                inputPlaceholder: "Type number here...",
+                resultLabel: "Result:",
+                copyBtnTitle: "Copy Result",
+                themeToggleTitle: "Toggle Dark/Light Mode",
+                languageToggleTitle: "Change Language to Kurdish",
+                alertCopied: "Result copied!",
+                alertCopyFailed: "Copy failed",
+                alertNoResult: "Nothing to copy!",
+                alertLongInput: `You can only enter up to ${MAX_LENGTH} digits.`,
+                alertConversionError: "An error occurred during conversion.",
+                alertNumberTooLarge: "The number is too large to be fully converted.",
+                footerText: `<a href="https://t.me/AW_Graphic_IT" target="_blank" rel="noopener noreferrer">ALAND</a>`,
+                langCode: 'en',
+                langDir: 'ltr',
+                langToggleText: 'KU',
+                // Important words to highlight
+                highlightWords: ['thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion', 'octillion', 'nonillion', 'decillion', 'undecillion', 'duodecillion', 'tredecillion', 'quattuordecillion', 'quindecillion', 'sexdecillion', 'septendecillion', 'octodecillion', 'novemdecillion', 'vigintillion', 'unvigintillion', 'duovigintillion', 'trevigintillion', 'quattuorvigintillion', 'quinvigintillion', 'sexvigintillion', 'septemvigintillion', 'octovigintillion', 'novemvigintillion', 'trigintillion', 'untrigintillion', 'duotrigintillion', 'tretrigintillion', 'quattuortrigintillion', 'quintrigintillion', 'sextrigintillion', 'septentrigintillion', 'octotrigintillion', 'novemtrigintillion'],
+            }
+        };
+
+        // --- فەنکشنی گۆڕینی زمان ---
+        function setLanguage(lang) {
+            if (!languages[lang]) lang = 'ckb'; // Fallback to Kurdish
+            currentLang = lang;
+            localStorage.setItem('language', lang);
+
+            const L = languages[lang];
+
+            // Update HTML attributes
+            htmlElement.lang = L.langCode;
+            htmlElement.dir = L.langDir;
+
+            // Update Text Content
+            pageTitle.textContent = L.pageTitle;
+            mainTitle.textContent = L.mainTitle;
+            subtitle.textContent = L.subtitle;
+            inputLabel.textContent = L.inputLabel;
+            numberInput.placeholder = L.inputPlaceholder;
+            resultLabel.textContent = L.resultLabel;
+            copyBtn.title = L.copyBtnTitle;
+            themeToggle.title = L.themeToggleTitle;
+            languageToggle.title = L.languageToggleTitle;
+            languageToggle.textContent = L.langToggleText;
+            pageFooter.innerHTML = L.footerText; // Use innerHTML for the link
+
+            // Clear previous result when language changes
+            resultText.innerHTML = '';
+            resultContainer.classList.remove('show');
+            copyBtn.classList.remove('show');
+
+            // Re-run conversion if there's input
+            handleConversion();
+        }
+
+        // --- Debounce Function ---
+        let debounceTimer;
+        function debounce(func, delay) {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(func, delay);
+        }
+
+        // --- فەنکشنە یارمەتیدەرەکان ---
+        function formatNumberWithCommas(numStr) {
+            const cleanNum = numStr.replace(/[^0-9]/g, '');
+            // Add commas for readability
+            return cleanNum.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        let alertTimeout;
+        function showAlert(message, duration = 3000) {
+            clearTimeout(alertTimeout);
+            alertTextElement.textContent = message;
+            const isMobile = window.innerWidth <= 600;
+
+            // Reset alert position and classes
+            alertDiv.classList.remove('show-mobile');
+            alertDiv.style.top = '-100px';
+            alertDiv.style.bottom = '-100px'; // Ensure bottom is also reset
+            void alertDiv.offsetWidth; // Force reflow to apply reset styles
+
+            if (isMobile) {
+                 alertDiv.style.top = 'auto'; // Ensure top doesn't interfere
+                 // Use setTimeout to allow reset styles to apply before adding class
+                 setTimeout(() => {
+                     alertDiv.classList.add('show-mobile'); // Add class for mobile styling
+                     alertDiv.style.bottom = '15px'; // Animate in from bottom
+                 }, 20); // Small delay
+                 alertTimeout = setTimeout(() => {
+                     alertDiv.style.bottom = '-100px'; // Animate out
+                      // Remove class after animation completes
+                      setTimeout(() => alertDiv.classList.remove('show-mobile'), 500);
+                 }, duration);
+            } else {
+                 alertDiv.style.bottom = 'auto'; // Ensure bottom doesn't interfere
+                 setTimeout(() => { alertDiv.style.top = '20px'; }, 20); // Animate in from top
+                 alertTimeout = setTimeout(() => { alertDiv.style.top = '-100px'; }, duration); // Animate out
+            }
+        }
+
+        // Ripple effect for buttons
+        function addRippleEffect(button, event) {
+             // Basic check if it's a valid element
+             if (!button || typeof button.getBoundingClientRect !== 'function') return;
+             const ripple = document.createElement('span');
+             const rect = button.getBoundingClientRect();
+             // Ensure rect is valid
+             if (!rect) return;
+             const size = Math.max(rect.width, rect.height);
+             const x = event.clientX - rect.left - size / 2;
+             const y = event.clientY - rect.top - size / 2;
+             ripple.style.width = ripple.style.height = `${size}px`;
+             ripple.style.left = `${x}px`;
+             ripple.style.top = `${y}px`;
+             ripple.classList.add('ripple');
+             // Remove previous ripple if exists
+             const existingRipple = button.querySelector('.ripple');
+             if (existingRipple) existingRipple.remove();
+             button.appendChild(ripple);
+             // Clean up ripple element after animation
+             ripple.addEventListener('animationend', () => {
+                 if (ripple.parentNode) ripple.remove();
+             }, { once: true });
+         }
+
+        // Fallback copy function for older browsers
+        function fallbackCopyToClipboard(text) {
+             const textArea = document.createElement('textarea');
+             textArea.value = text;
+             // Make it non-editable and invisible
+             textArea.style.position = 'fixed'; textArea.style.left = '-9999px'; textArea.style.top = '-9999px';
+             textArea.setAttribute('readonly', ''); document.body.appendChild(textArea);
+             textArea.select(); textArea.setSelectionRange(0, 99999); // For mobile devices
+             try {
+                 const successful = document.execCommand('copy');
+                 showAlert(successful ? languages[currentLang].alertCopied : languages[currentLang].alertCopyFailed);
+             } catch (err) {
+                 console.error('Fallback copy failed:', err);
+                 showAlert(languages[currentLang].alertCopyFailed);
+             }
+             document.body.removeChild(textArea);
+         }
+
+        // Modern async clipboard function
+        async function copyToClipboard(text) {
+             if (navigator.clipboard && navigator.clipboard.writeText) {
+                 try {
+                     await navigator.clipboard.writeText(text);
+                     showAlert(languages[currentLang].alertCopied);
+                 } catch (err) {
+                     console.error('Async clipboard copy failed:', err);
+                     // Fallback if async fails (e.g., permissions)
+                     fallbackCopyToClipboard(text);
+                 }
+             } else {
+                 // Use fallback for browsers without Clipboard API
+                 fallbackCopyToClipboard(text);
+             }
+         }
+
+         // Function to display result with word-by-word animation and highlighting
+         function displayResultWithAnimation(resultElement, text) {
+             resultElement.innerHTML = ''; // Clear previous content
+             if (!text) return;
+
+             // Split by spaces OR commas, keeping the delimiters for accurate reconstruction
+             const words = text.split(/(\s+|,)/);
+             let delay = 50; // Initial delay
+             const delayIncrement = 25; // Delay increment per word
+             const currentHighlightWords = languages[currentLang].highlightWords || [];
+             let fragment = document.createDocumentFragment(); // Use fragment for performance
+
+             words.forEach(word => {
+                 const trimmedWord = word.trim();
+                 // Handle separators (commas, multiple spaces) or empty strings from split
+                 if (trimmedWord === '' && word !== ' ') {
+                      fragment.appendChild(document.createTextNode(word));
+                      return; // Append separator and continue
+                 }
+                 // Handle single spaces separately to avoid extra margins if span wraps it
+                  if (word === ' ') {
+                      fragment.appendChild(document.createTextNode(' '));
+                      return;
+                  }
+
+                 const wordSpan = document.createElement('span');
+                 wordSpan.textContent = word; // Use original word (might include surrounding space/comma)
+                 wordSpan.style.animationDelay = `${delay}ms`; // Apply animation delay
+
+                 // Highlight based on the trimmed word for comparison
+                 if (currentHighlightWords.includes(trimmedWord)) {
+                     wordSpan.classList.add('highlight-word');
+                 }
+                 fragment.appendChild(wordSpan);
+                 delay += delayIncrement;
+            });
+
+             resultElement.appendChild(fragment);
+             // Scroll to top after animation likely started
+             setTimeout(() => { resultElement.scrollTop = 0; }, delay + 50);
+         }
+
+        // Function to replace Eastern Arabic numerals (٠-٩) with Western Arabic numerals (0-9)
+        function replaceKurdishNumerals(str) {
+            const map = { '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9' };
+            return str.replace(/[٠١٢٣٤٥٦٧٨٩]/g, m => map[m] || m);
+        }
+
+        // --- لۆجیکی گۆڕینی ژمارە (کوردی سۆرانی) ---
+        // Converts numbers 0-999 to Kurdish Sorani text
+        function convertSmallNumberToKurdishSorani(num) {
+            const units = ['', 'یەک', 'دوو', 'سێ', 'چوار', 'پێنج', 'شەش', 'حەوت', 'هەشت', 'نۆ'];
+            const teens = ['دە', 'یازدە', 'دوازدە', 'سیازدە', 'چواردە', 'پازدە', 'شازدە', 'حەڤدە', 'هەژدە', 'نۆزدە'];
+            const tens = ['', 'دە', 'بیست', 'سی', 'چل', 'پەنجا', 'شەست', 'حەفتا', 'هەشتا', 'نەوەد'];
+
+            num = Math.floor(Number(num)); // Ensure it's a number
+            if (isNaN(num) || num < 0 || num > 999) return ''; // Invalid input
+            if (num === 0) return ''; // Return empty for zero chunk, handle "سفر" in the main function
+
+            let result = [];
+
+            // Handle hundreds
+            if (num >= 100) {
+                const hundredDigit = Math.floor(num / 100);
+                if (hundredDigit === 1) {
+                    result.push('سەد'); // Just "سەد" for 100-199
+                } else {
+                    result.push(units[hundredDigit] + ' سەد'); // "دوو سەد", "سێ سەد", etc.
+                }
+                num %= 100; // Get the remainder
+            }
+
+            // Handle tens and units
+            if (num > 0) {
+                if (result.length > 0) result.push('و'); // Add "و" if there was a hundred part
+                if (num < 10) result.push(units[num]); // 1-9
+                else if (num < 20) result.push(teens[num - 10]); // 10-19
+                else {
+                    const tenDigit = Math.floor(num / 10);
+                    result.push(tens[tenDigit]); // 20, 30, ..., 90
+                    const unitDigit = num % 10;
+                    if (unitDigit > 0) {
+                        result.push('و'); // Add "و" for numbers like 21, 35, etc.
+                        result.push(units[unitDigit]);
+                    }
+                }
+            }
+            return result.join(' '); // Join parts with space
+        }
+
+        // Converts large numbers (using BigInt) to Kurdish Sorani text
+        function convertLargeNumberToKurdishSorani(numStr) {
+            numStr = numStr.replace(/[^0-9]/g, ''); // Clean the input string
+            if (!numStr) return '';
+            if (numStr === '0') return 'سفر'; // Handle zero explicitly
+
+            // Check max length AFTER cleaning
+            if (numStr.length > MAX_LENGTH) {
+                 // Show alert, but return empty string or partial result? Currently returns empty.
+                 showAlert(languages.ckb.alertLongInput.replace('${MAX_LENGTH}', MAX_LENGTH));
+                 return '';
+             }
+
+            const num = BigInt(numStr);
+            const scales = languages.ckb.highlightWords; // Get scale names from language object
+
+            let remainingNum = num;
+            let scaleIndex = 0;
+            let parts = []; // Store the text parts
+
+            if (remainingNum === 0n) return 'سفر'; // Should be caught earlier, but safety check
+
+            while (remainingNum > 0n) {
+                 // Check if we have a scale name for this level
+                 if (scaleIndex > 0 && scaleIndex > scales.length) { // scaleIndex 0 is units, 1 is thousand, etc.
+                     console.error("ژمارەکە زۆر لە پێوەرە دیاریکراوەکان گەورەترە.");
+                     showAlert(languages.ckb.alertNumberTooLarge);
+                     // Return what has been converted so far
+                     return parts.length > 0 ? parts.reverse().join(' و ') : '';
+                 }
+                const chunk = remainingNum % 1000n; // Get the last 3 digits
+                if (chunk > 0n) {
+                    const chunkText = convertSmallNumberToKurdishSorani(Number(chunk)); // Convert the chunk
+                    const scaleName = scaleIndex > 0 ? scales[scaleIndex-1] : ''; // Get scale name (thousand, million, etc.)
+                    let part = chunkText;
+                    if (scaleName) {
+                         // Special case for "هەزار": if chunk is 1, just say "هەزار" not "یەک هەزار"
+                         if (chunk === 1n && scaleName === 'هەزار') {
+                            part = scaleName; // Only "هەزار"
+                         } else {
+                            part += ' ' + scaleName; // e.g., "دوو هەزار", "سەد ملیۆن"
+                         }
+                    }
+                    parts.push(part.trim()); // Add the converted part to the list
+                }
+                remainingNum /= 1000n; // Move to the next chunk
+                scaleIndex++;
+            }
+            // Join the parts in reverse order with " و "
+            return parts.reverse().join(' و ');
+        }
+
+
+        // --- لۆجیکی گۆڕینی ژمارە (ئینگلیزی) ---
+        // Converts numbers 0-999 to English text
+        function convertSmallNumberToEnglish(num) {
+            const units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+            const teens = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+            const tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+            num = Math.floor(Number(num));
+            if (isNaN(num) || num < 0 || num > 999) return '';
+            if (num === 0) return ''; // Return empty for zero chunk
+
+            let result = [];
+            let needsAnd = false; // Flag for British English 'and'
+
+            if (num >= 100) {
+                result.push(units[Math.floor(num / 100)] + ' hundred');
+                num %= 100;
+                if (num > 0) {
+                     needsAnd = true; // Need 'and' if something follows the hundred
+                }
+            }
+
+            if (num > 0) {
+                 if (needsAnd) {
+                     result.push('and');
+                 }
+                if (num < 10) result.push(units[num]);
+                else if (num < 20) result.push(teens[num - 10]);
+                else {
+                    const tenDigit = Math.floor(num / 10);
+                    result.push(tens[tenDigit]);
+                    const unitDigit = num % 10;
+                    if (unitDigit > 0) {
+                        // Join with space (or hyphen if preferred)
+                        result.push(units[unitDigit]);
+                        // result.push('-' + units[unitDigit]); // Uncomment for hyphen like twenty-one
+                    }
+                }
+            }
+            // Join with spaces, handle hyphen case if used
+            return result.join(' '); //.replace(' -','-'); // Uncomment replace if using hyphens
+        }
+
+        // Converts large numbers (using BigInt) to English text
+        function convertLargeNumberToEnglish(numStr) {
+            numStr = numStr.replace(/[^0-9]/g, ''); // Clean input
+            if (!numStr) return '';
+            if (numStr === '0') return 'zero'; // Handle zero
+
+            if (numStr.length > MAX_LENGTH) {
+                 showAlert(languages.en.alertLongInput.replace('${MAX_LENGTH}', MAX_LENGTH));
+                 return '';
+             }
+
+            const num = BigInt(numStr);
+            const scales = languages.en.highlightWords; // Use scales from language object
+
+            let remainingNum = num;
+            let scaleIndex = 0;
+            let parts = [];
+
+            if (remainingNum === 0n) return 'zero'; // Safety check
+
+            while (remainingNum > 0n) {
+                // Check scale bounds
+                if (scaleIndex > 0 && scaleIndex > scales.length) {
+                     console.error("Number too large for defined English scales.");
+                     showAlert(languages.en.alertNumberTooLarge);
+                     return parts.length > 0 ? parts.reverse().join(', ') : ''; // Return partial result
+                 }
+                const chunk = remainingNum % 1000n;
+                if (chunk > 0n) {
+                    const chunkText = convertSmallNumberToEnglish(Number(chunk));
+                    const scaleName = scaleIndex > 0 ? scales[scaleIndex-1] : ''; // Get scale name
+                    let part = chunkText;
+                    if (scaleName) {
+                         part += ' ' + scaleName; // Add scale name (e.g., "thousand", "million")
+                    }
+                    parts.push(part.trim()); // Add to parts list
+                }
+                remainingNum /= 1000n;
+                scaleIndex++;
+            }
+            // Join English parts with commas and spaces
+            return parts.reverse().join(', ');
+        }
+
+
+        // --- لۆجیکی سەرەکی گۆڕین (بە پشتگیری زمان) ---
+        function handleConversion() {
+            let rawInput = numberInput.value.trim();
+            // Normalize any Kurdish numerals first
+            let normalizedInput = replaceKurdishNumerals(rawInput);
+            // Then remove anything that isn't a digit (like commas added by formatting)
+            let numberStr = normalizedInput.replace(/[^0-9]/g, '');
+            const numberLength = numberStr.length;
+
+            // Update counter immediately based on digits
+            charCounter.textContent = `${numberLength} / ${MAX_LENGTH}`;
+
+             // Check length against MAX_LENGTH (digits only)
+             if (numberLength > MAX_LENGTH) {
+                 showAlert(languages[currentLang].alertLongInput.replace('${MAX_LENGTH}', MAX_LENGTH));
+                 // Trim the digit string - the input field formatting will handle the visual update
+                 numberStr = numberStr.slice(0, MAX_LENGTH);
+                 // Update counter again after trimming
+                 charCounter.textContent = `${MAX_LENGTH} / ${MAX_LENGTH}`;
+             }
+
+             // If no valid digits remain, clear results and stop
+             if (numberStr === '') {
+                 resultContainer.classList.remove('show');
+                 copyBtn.classList.remove('show');
+                 resultText.innerHTML = '';
+                 loadingSpinner.style.display = 'none';
+                 return;
+             }
+
+            // Show loading spinner, hide result/copy button
+            loadingSpinner.style.display = 'block';
+            resultContainer.classList.remove('show'); // Hide container while loading
+            copyBtn.classList.remove('show');
+            resultText.innerHTML = ''; // Clear previous result text
+
+            // Use setTimeout to allow the UI (spinner) to render before the potentially heavy conversion task
+            setTimeout(() => {
+                try {
+                    let convertedText = '';
+                    // Call the appropriate conversion function based on current language
+                    if (currentLang === 'ckb') {
+                        convertedText = convertLargeNumberToKurdishSorani(numberStr);
+                    } else {
+                        convertedText = convertLargeNumberToEnglish(numberStr);
+                    }
+
+                    loadingSpinner.style.display = 'none'; // Hide spinner after conversion
+
+                    if (convertedText) {
+                         resultContainer.classList.add('show'); // Show container again
+                         displayResultWithAnimation(resultText, convertedText); // Display result with animation
+                         copyBtn.classList.add('show'); // Show copy button
+                    } else {
+                        // Handle cases where conversion returns empty (e.g., error already shown)
+                         resultContainer.classList.remove('show');
+                         copyBtn.classList.remove('show');
+                     }
+                } catch (error) {
+                    console.error("Error during conversion:", error);
+                    showAlert(languages[currentLang].alertConversionError);
+                    loadingSpinner.style.display = 'none'; // Hide spinner on error
+                    resultContainer.classList.remove('show');
+                    copyBtn.classList.remove('show');
+                    resultText.innerHTML = ''; // Clear any partial result
+                }
+            }, 50); // Short delay (e.g., 50ms) is usually enough
+        }
+
+
+        // --- گوێگرە ڕووداوەکان (Event Listeners) ---
+
+        // Theme Toggle Button
+        themeToggle.addEventListener('click', (e) => {
+            addRippleEffect(themeToggle, e); // Add ripple effect
+            const isDarkMode = htmlElement.classList.toggle('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light'); // Save preference
+            // Update icon based on theme
+            themeToggle.innerHTML = isDarkMode ?
+                `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>` // Moon icon
+                :
+                `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`; // Sun icon
+        });
+
+         // Language Toggle Button
+        languageToggle.addEventListener('click', (e) => {
+            addRippleEffect(languageToggle, e); // Add ripple effect
+            const nextLang = currentLang === 'ckb' ? 'en' : 'ckb'; // Switch language
+            setLanguage(nextLang); // Apply the new language
+        });
+
+        // Input Field Listener (handles formatting and triggers conversion)
+        numberInput.addEventListener('input', () => {
+             let cursorPos = numberInput.selectionStart; // Store cursor position
+             const originalValue = numberInput.value;
+             const originalLength = originalValue.length;
+
+             // 1. Normalize Kurdish numerals to Western numerals
+             let normalizedVal = replaceKurdishNumerals(originalValue);
+
+             // 2. Clean the value to get only digits for length check and formatting
+             let cleanForFormatting = normalizedVal.replace(/[^0-9]/g, '');
+             const digitLength = cleanForFormatting.length;
+
+             // 3. Enforce MAX_LENGTH based on digits
+             let lengthExceeded = false;
+             if (digitLength > MAX_LENGTH) {
+                 cleanForFormatting = cleanForFormatting.slice(0, MAX_LENGTH);
+                 lengthExceeded = true;
+                 // The alert will be shown by handleConversion if needed
+             }
+
+             // 4. Format the cleaned (and possibly truncated) number with commas
+             let formattedVal = formatNumberWithCommas(cleanForFormatting);
+
+             // 5. Update the input field value
+             numberInput.value = formattedVal;
+
+             // 6. Restore cursor position intelligently
+             if (cursorPos !== null) {
+                 const newLength = formattedVal.length;
+                 let newCursorPos = cursorPos;
+
+                 if (lengthExceeded) {
+                     // If max length was hit, try to keep cursor at the end
+                     newCursorPos = newLength;
+                 } else {
+                     // Calculate difference in commas before the original cursor position
+                     const originalCommasBefore = (originalValue.substring(0, cursorPos).match(/,/g) || []).length;
+                     // Find equivalent position in the *cleaned* string before formatting
+                     let cleanCursorPos = replaceKurdishNumerals(originalValue.substring(0, cursorPos)).replace(/[^0-9]/g, '').length;
+                     // Find the new cursor position in the formatted string by counting digits
+                     let digitsCounted = 0;
+                     for(let i=0; i < newLength; i++) {
+                         if (formattedVal[i] >= '0' && formattedVal[i] <= '9') {
+                             digitsCounted++;
+                         }
+                         if(digitsCounted === cleanCursorPos) {
+                              newCursorPos = i + 1; // Position after the matched digit
+                              // Adjust if the next char is a comma that was just added
+                              if(formattedVal[newCursorPos] === ',' && (originalValue[cursorPos] !== ',' || newLength > originalLength) ) {
+                                //   newCursorPos++; // Decide if you want to jump over the comma
+                              }
+                              break;
+                         }
+                         // If we run out of chars before finding enough digits, place at end
+                         if (i === newLength -1) newCursorPos = newLength;
+                     }
+                     // Fallback if something went wrong
+                     if(digitsCounted < cleanCursorPos) newCursorPos = newLength;
+
+                 }
+
+
+                 // Ensure cursor position is valid
+                 newCursorPos = Math.max(0, Math.min(newCursorPos, newLength));
+                 try {
+                    // Use requestAnimationFrame to set cursor after browser update (sometimes helps)
+                    requestAnimationFrame(() => {
+                        numberInput.setSelectionRange(newCursorPos, newCursorPos);
+                    });
+                 } catch (e) { console.warn("Could not set cursor position", e); }
+             }
+
+             // Update character counter based on clean digits length
+             charCounter.textContent = `${cleanForFormatting.length} / ${MAX_LENGTH}`;
+
+             // Call debounced conversion function
+             debounce(() => handleConversion(), 400); // Debounce conversion call (e.g., 400ms delay)
+         });
+
+
+        // Copy Button Listener
+        copyBtn.addEventListener('click', (e) => {
+             addRippleEffect(copyBtn, e); // Add ripple effect
+             // Get text, replace multiple spaces/newlines with single space for cleaner copy
+             const textToCopy = resultText.textContent.trim().replace(/\s+/g, ' ');
+             if (textToCopy) {
+                  copyToClipboard(textToCopy); // Use the copy function
+             } else {
+                  showAlert(languages[currentLang].alertNoResult); // Show alert if no text
+             }
+        });
+
+         // --- دەستپێکردن (Initialization) ---
+         // Runs when the script loads
+         function initializeApp() {
+             // Set initial theme based on localStorage or system preference (optional)
+             const savedTheme = localStorage.getItem('theme');
+             const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+             if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                 htmlElement.classList.add('dark-mode');
+                 // Update theme toggle icon immediately
+                 themeToggle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+             } else {
+                 htmlElement.classList.remove('dark-mode');
+                 themeToggle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+             }
+
+             // Set initial language (already defaults to 'ckb' or from localStorage)
+             setLanguage(currentLang);
+
+             // Initialize char counter
+             charCounter.textContent = `0 / ${MAX_LENGTH}`;
+
+             console.log(`Converter Initialized! Language: ${currentLang}, Theme: ${htmlElement.classList.contains('dark-mode') ? 'dark' : 'light'}`);
+         }
+
+         initializeApp(); // Run initialization function
+
+    </script>
+
+</body>
+</html>
